@@ -1,5 +1,5 @@
 # Gesture-Controlled Robot
-Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
+This project is basically about controlling a robot car with your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to get the code to work with the Arduino Uno and the motor controllers, so my car does move!
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 ```HTML 
@@ -9,7 +9,7 @@ You should comment out all portions of your portfolio that you have not complete
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
-| FirstName LastInitialOnly | School Name | Electrical Engineering | Incoming Senior
+| Jash D | Dublin High School | Mechanical Engineering | Incoming Senior
 
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
