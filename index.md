@@ -2,9 +2,14 @@
 This project is basically about controlling a robot car with your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to get the code to work with the Arduino Uno and the motor controllers, so my car does move!
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
-```HTML 
-<!--- This is an HTML comment in Markdown -->
-<!--- Anything between these symbols will not render on the published site -->
+```html
+In Progress:
+- Second and third milestones
+- Headstone image
+- Schematics
+- Final code
+- Bill of Materials
+- Other resources
 ```
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
@@ -17,9 +22,7 @@ You should comment out all portions of your portfolio that you have not complete
   
 # Final Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=WBYdMrUd0w0" title="Final Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
@@ -31,9 +34,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 # Second Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=WBYdMrUd0w0" title="Second Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
 - Technical details of what you've accomplished and how they contribute to the final goal
@@ -43,49 +44,145 @@ For your second milestone, explain what you've worked on since your previous mil
 
 # First Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=YTKSOw8SZiI" title="First Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/CaCazFBhYKs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-For your first milestone, describe what your project is and how you plan to build it. You can include:
-- An explanation about the different components of your project and how they will all integrate together
-- Technical progress you've made so far
-- Challenges you're facing and solving in your future milestones
-- What your plan is to complete your project
+So far, I have made progress on my project by completing the car portion, which I can control by uploading code to the Arduino Uno to make it move as I want, but it’s not yet remotely controlled. The setup uses an Arduino Uno to send commands to two motor controllers (H-bridges) which power two motors each for the front and rear motor pairs, all running on a single 9-volt battery. I faced some challenges, like bootloader issues in the Arduino IDE, a faulty rear motor, and the power supply overheating because the motors drew too much current, but my instructors helped me solve these problems. My next steps are to add a Bluetooth module to the car on a breadboard to connect a the car to a motor controller with another bluetooth module on it, using an Arduino Nano with an accelerometer.
 
 # Schematics 
-Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
+My schematic diagrams are currently in progress.
 
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
+Here is my current code prior to adding the bluetooth modules:
 
 ```c++
+// rear motor controller pins
+const int B_1A_R = 4;
+const int B_2A_R = 5;
+const int A_1A_R = 6;
+const int A_1B_R = 7;
+
+// front motor controller pins
+const int B_1A_F = 11;
+const int B_2A_F = 10;
+const int A_1A_F = 9;
+const int A_1B_F = 8;
+
 void setup() {
-  // put your setup code here, to run once:
+  pinMode(B_1A_R, OUTPUT);
+  pinMode(B_2A_R, OUTPUT);
+  pinMode(A_1A_R, OUTPUT);
+  pinMode(A_1B_R, OUTPUT);
+  pinMode(B_1A_F, OUTPUT);
+  pinMode(B_2A_F, OUTPUT);
+  pinMode(A_1A_F, OUTPUT);
+  pinMode(A_1B_F, OUTPUT);
+
   Serial.begin(9600);
-  Serial.println("Hello World!");
+  Serial.println("full movement test for milestone 1");
+  delay(2000);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  Serial.println("forward");
+  digitalWrite(B_1A_R, HIGH);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, HIGH);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, HIGH);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, HIGH);
+  digitalWrite(A_1B_F, LOW);
+  delay(2000);
 
+  Serial.println("stop");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, LOW);
+  delay(1000);
+
+  Serial.println("left");
+  digitalWrite(B_1A_R, HIGH);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, HIGH);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, HIGH);
+  digitalWrite(A_1A_F, HIGH);
+  digitalWrite(A_1B_F, LOW);
+  delay(1000);
+
+  Serial.println("stop");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, LOW);
+  delay(1000);
+
+  Serial.println("right");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, HIGH);
+  digitalWrite(A_1A_R, HIGH);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, HIGH);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, HIGH);
+  delay(1000);
+
+  Serial.println("stop");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, LOW);
+  delay(1000);
+
+  Serial.println("back");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, HIGH);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, HIGH);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, HIGH);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, HIGH);
+  delay(2000);
+
+  Serial.println("stop");
+  digitalWrite(B_1A_R, LOW);
+  digitalWrite(B_2A_R, LOW);
+  digitalWrite(A_1A_R, LOW);
+  digitalWrite(A_1B_R, LOW);
+  digitalWrite(B_1A_F, LOW);
+  digitalWrite(B_2A_F, LOW);
+  digitalWrite(A_1A_F, LOW);
+  digitalWrite(A_1B_F, LOW);
+  delay(1000);
 }
 ```
 
 # Bill of Materials
-Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
-Don't forget to place the link of where to buy each component inside the quotation marks in the corresponding row after href =. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize this to your project needs. 
 
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Item Name | Why? | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Item Name | Why? | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Item Name | Why? | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
 
 # Other Resources/Examples
-One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
+
 - [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
 - [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
 - [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
-
-To watch the BSE tutorial on how to create a portfolio, click here.
