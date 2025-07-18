@@ -1,13 +1,13 @@
 # Gesture-Controlled Robot
-This project is basically about controlling a robot car with your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to get the code to work with the Arduino Uno and the motor controllers, so my car does move!
+This project is about controlling a robot car with gestures from your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to complete my base project, and am now working on modifications!
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 ```html
 In Progress:
-- Second and third milestones
+- Third milestone
 - Headstone image
 - Schematics
-- Final code
+- Modifications
 - Bill of Materials
 - Other resources
 ```
@@ -36,11 +36,9 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/watch?v=WBYdMrUd0w0" title="Second Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
-- Technical details of what you've accomplished and how they contribute to the final goal
-- What has been surprising about the project so far
-- Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone 
+Since my first milestone, I integrated gesture control and bluetooth communication into my project, which means that I have completed my base project. I had to sync the bluetooth modules by wiring everything correctly (especially the TX and RX pins), and setting them up using serial commands to assign the Uno to be the slave and the Nano as the master. The nano is the controller, and it sends movement commands based on the accelerometer input data to the Uno on the car via bluetooth, which controls the car's motors. Also, I realized that just one 9V power supply was not enough to meet the demands of the motors, so everything would start heating up, which is why I decided to use two 9V batteries, each one for two motors. There were some programming and wiring issues which Josh helped me fix. Before the final milestone, I am planning on adding a speedometer and a 7-segment display as my modification, and I need to organize everything on the car since everything is currently a mess.
+
+
 
 # First Milestone
 
@@ -52,22 +50,127 @@ So far, I have made progress on my project by completing the car portion, which 
 My schematic diagrams are currently in progress.
 
 # Code
-Here is my current code prior to adding the bluetooth modules:
+Here is my current code for my final base project, prior to adding any modifications:
+
+## **Code for Nano:**
 
 ```c++
-// rear motor controller pins
+#include <SoftwareSerial.h>
+#include <Wire.h>
+
+SoftwareSerial BT_Serial(3, 2);
+const int MPU = 0x68;
+int16_t AcX, AcY, AcZ;
+int flag = 0;
+char command = 'S';
+
+void setup() {
+  Serial.begin(38400);
+  BT_Serial.begin(38400);
+
+  Wire.begin();
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  if (Wire.endTransmission(true) != 0) {
+    Serial.println("accelerometer not detected");
+    while (1);
+  }
+  Serial.println("controller ready");
+  delay(500);
+}
+
+void loop() {
+  Read_accelerometer();
+  determineGesture();
+  delay(100);
+}
+
+void Read_accelerometer() {
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B);
+  if (Wire.endTransmission(false) != 0) {
+    Serial.println("accelerometer not connecting");
+    return;
+  }
+  Wire.requestFrom(MPU, 6, true);
+  if (Wire.available() == 6) {
+    AcX = Wire.read() << 8 | Wire.read();
+    AcY = Wire.read() << 8 | Wire.read();
+    AcZ = Wire.read() << 8 | Wire.read();
+
+    AcX = map(AcX, -32768, 32767, 0, 180);
+    AcY = map(AcY, -32768, 32767, 0, 180);
+    AcZ = map(AcZ, -32768, 32767, 0, 180);
+
+    Serial.print("X: "); Serial.print(AcX);
+    Serial.print(" Y: "); Serial.print(AcY);
+    Serial.print(" Z: "); Serial.println(AcZ);
+  } else {
+    Serial.println("accelerometer not reading");
+  }
+}
+
+void determineGesture() {
+
+  if (AcX < 60 && flag == 0) {
+    flag = 1;
+    command = 'F';
+    Serial.println("F");
+  } else if (AcX > 130 && flag == 0) {
+    flag = 1;
+    command = 'B';
+    Serial.println("B");
+  } else if (AcY < 60 && flag == 0) {
+    flag = 1;
+    command = 'L';
+    Serial.println("L");
+  } else if (AcY > 130 && flag == 0) {
+    flag = 1;
+    command = 'R';
+    Serial.println("R");
+  } else if (AcX > 70 && AcX < 120 && AcY > 70 && AcY < 120 && flag == 1) {
+    flag = 0;
+    command = 'S';
+    Serial.println("S");
+  } else {
+    return;
+  }
+
+  BT_Serial.write(command);
+}
+```
+
+## **Code for Uno:**
+
+```c++
+#include <SoftwareSerial.h>
+
+#define tx 2
+#define rx 3
+
+SoftwareSerial configBt(rx, tx);
+
+// rear motor pins
 const int B_1A_R = 4;
 const int B_2A_R = 5;
 const int A_1A_R = 6;
 const int A_1B_R = 7;
 
-// front motor controller pins
+// front motor pins
 const int B_1A_F = 11;
 const int B_2A_F = 10;
 const int A_1A_F = 9;
 const int A_1B_F = 8;
 
+char c = 'S';
+
 void setup() {
+  Serial.begin(38400);
+  configBt.begin(38400);
+  pinMode(tx, OUTPUT);
+  pinMode(rx, INPUT);
+
   pinMode(B_1A_R, OUTPUT);
   pinMode(B_2A_R, OUTPUT);
   pinMode(A_1A_R, OUTPUT);
@@ -77,13 +180,36 @@ void setup() {
   pinMode(A_1A_F, OUTPUT);
   pinMode(A_1B_F, OUTPUT);
 
-  Serial.begin(9600);
-  Serial.println("full movement test for milestone 1");
-  delay(2000);
+  Serial.println("car is ready");
 }
 
 void loop() {
-  Serial.println("forward");
+  if (configBt.available()) {
+    c = (char)configBt.read();
+    Serial.println(c);
+  }
+
+  switch (c) {
+    case 'F':
+      forward();
+      break;
+    case 'L':
+      left();
+      break;
+    case 'R':
+      right();
+      break;
+    case 'B':
+      backward();
+      break;
+    case 'S':
+      freeze();
+      break;
+  }
+  delay(100);
+}
+
+void forward() {
   digitalWrite(B_1A_R, HIGH);
   digitalWrite(B_2A_R, LOW);
   digitalWrite(A_1A_R, HIGH);
@@ -92,20 +218,20 @@ void loop() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, HIGH);
   digitalWrite(A_1B_F, LOW);
-  delay(2000);
+}
 
-  Serial.println("stop");
+void backward() {
   digitalWrite(B_1A_R, LOW);
-  digitalWrite(B_2A_R, LOW);
+  digitalWrite(B_2A_R, HIGH);
   digitalWrite(A_1A_R, LOW);
-  digitalWrite(A_1B_R, LOW);
+  digitalWrite(A_1B_R, HIGH);
   digitalWrite(B_1A_F, LOW);
-  digitalWrite(B_2A_F, LOW);
+  digitalWrite(B_2A_F, HIGH);
   digitalWrite(A_1A_F, LOW);
-  digitalWrite(A_1B_F, LOW);
-  delay(1000);
+  digitalWrite(A_1B_F, HIGH);
+}
 
-  Serial.println("left");
+void left() {
   digitalWrite(B_1A_R, HIGH);
   digitalWrite(B_2A_R, LOW);
   digitalWrite(A_1A_R, LOW);
@@ -114,20 +240,9 @@ void loop() {
   digitalWrite(B_2A_F, HIGH);
   digitalWrite(A_1A_F, HIGH);
   digitalWrite(A_1B_F, LOW);
-  delay(1000);
+}
 
-  Serial.println("stop");
-  digitalWrite(B_1A_R, LOW);
-  digitalWrite(B_2A_R, LOW);
-  digitalWrite(A_1A_R, LOW);
-  digitalWrite(A_1B_R, LOW);
-  digitalWrite(B_1A_F, LOW);
-  digitalWrite(B_2A_F, LOW);
-  digitalWrite(A_1A_F, LOW);
-  digitalWrite(A_1B_F, LOW);
-  delay(1000);
-
-  Serial.println("right");
+void right() {
   digitalWrite(B_1A_R, LOW);
   digitalWrite(B_2A_R, HIGH);
   digitalWrite(A_1A_R, HIGH);
@@ -136,9 +251,9 @@ void loop() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, LOW);
   digitalWrite(A_1B_F, HIGH);
-  delay(1000);
+}
 
-  Serial.println("stop");
+void freeze() {
   digitalWrite(B_1A_R, LOW);
   digitalWrite(B_2A_R, LOW);
   digitalWrite(A_1A_R, LOW);
@@ -147,29 +262,6 @@ void loop() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, LOW);
   digitalWrite(A_1B_F, LOW);
-  delay(1000);
-
-  Serial.println("back");
-  digitalWrite(B_1A_R, LOW);
-  digitalWrite(B_2A_R, HIGH);
-  digitalWrite(A_1A_R, LOW);
-  digitalWrite(A_1B_R, HIGH);
-  digitalWrite(B_1A_F, LOW);
-  digitalWrite(B_2A_F, HIGH);
-  digitalWrite(A_1A_F, LOW);
-  digitalWrite(A_1B_F, HIGH);
-  delay(2000);
-
-  Serial.println("stop");
-  digitalWrite(B_1A_R, LOW);
-  digitalWrite(B_2A_R, LOW);
-  digitalWrite(A_1A_R, LOW);
-  digitalWrite(A_1B_R, LOW);
-  digitalWrite(B_1A_F, LOW);
-  digitalWrite(B_2A_F, LOW);
-  digitalWrite(A_1A_F, LOW);
-  digitalWrite(A_1B_F, LOW);
-  delay(1000);
 }
 ```
 
