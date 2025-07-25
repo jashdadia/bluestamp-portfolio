@@ -22,7 +22,7 @@ In Progress:
   
 # Final Milestone
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=WBYdMrUd0w0" title="Final Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="1811" height="891" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
@@ -34,7 +34,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 # Second Milestone
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=WBYdMrUd0w0" title="Second Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="1811" height="891" src="https://www.youtube.com/embed/ykYTbxI2UQA" title="Jash D Milestone 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Since my first milestone, I integrated gesture control and bluetooth communication into my project, which means that I have completed my base project. I had to sync the bluetooth modules by wiring everything correctly (especially the TX and RX pins), and setting them up using serial commands to assign the Uno to be the slave and the Nano as the master. The nano is the controller, and it sends movement commands based on the accelerometer input data to the Uno on the car via bluetooth, which controls the car's motors. Also, I realized that just one 9V power supply was not enough to meet the demands of the motors, so everything would start heating up, which is why I decided to use two 9V batteries, each one for two motors. There were some programming and wiring issues which Josh helped me fix. Before the final milestone, I am planning on adding a speedometer and a 7-segment display as my modification, and I need to organize everything on the car since everything is currently a mess.
 
@@ -42,7 +42,7 @@ Since my first milestone, I integrated gesture control and bluetooth communicati
 
 # First Milestone
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=YTKSOw8SZiI" title="First Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="1811" height="891" src="https://www.youtube.com/embed/YTKSOw8SZiI" title="Jash D Milestone 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 So far, I have made progress on my project by completing the car portion, which I can control by uploading code to the Arduino Uno to make it move as I want, but it’s not yet remotely controlled. The setup uses an Arduino Uno to send commands to two motor controllers (H-bridges) which power two motors each for the front and rear motor pairs, all running on a single 9-volt battery. I faced some challenges, like bootloader issues in the Arduino IDE, a faulty rear motor, and the power supply overheating because the motors drew too much current, but my instructors helped me solve these problems. My next steps are to add a Bluetooth module to the car on a breadboard to connect a the car to a motor controller with another bluetooth module on it, using an Arduino Nano with an accelerometer.
 
@@ -50,7 +50,7 @@ So far, I have made progress on my project by completing the car portion, which 
 My schematic diagrams are currently in progress.
 
 # Code
-Here is my current code for my final base project, prior to adding any modifications:
+Here is my final code for my gesture-controlled robot, after adding the ultrasonic sensor:
 
 ## **Code for Nano:**
 
@@ -145,31 +145,36 @@ void determineGesture() {
 
 ```c++
 #include <SoftwareSerial.h>
+#include <NewPing.h>
 
 #define tx 2
 #define rx 3
+#define trigPin 12
+#define echoPin 13
+#define MAX_DISTANCE 200 //200mm max
 
 SoftwareSerial configBt(rx, tx);
+NewPing sonar(trigPin, echoPin, MAX_DISTANCE);
 
-// rear motor pins
 const int B_1A_R = 4;
 const int B_2A_R = 5;
 const int A_1A_R = 6;
 const int A_1B_R = 7;
 
-// front motor pins
 const int B_1A_F = 11;
 const int B_2A_F = 10;
 const int A_1A_F = 9;
 const int A_1B_F = 8;
 
 char c = 'S';
+char lastCommand = 'S';
 
 void setup() {
   Serial.begin(38400);
   configBt.begin(38400);
   pinMode(tx, OUTPUT);
   pinMode(rx, INPUT);
+
 
   pinMode(B_1A_R, OUTPUT);
   pinMode(B_2A_R, OUTPUT);
@@ -180,33 +185,79 @@ void setup() {
   pinMode(A_1A_F, OUTPUT);
   pinMode(A_1B_F, OUTPUT);
 
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  freeze();
   Serial.println("car is ready");
 }
 
 void loop() {
-  if (configBt.available()) {
-    c = (char)configBt.read();
-    Serial.println(c);
+
+  unsigned int distance = sonar.ping_cm();
+  if (distance == 0) distance = MAX_DISTANCE;
+
+  if (distance < 20 && lastCommand == 'F') {
+    freeze();
+    lastCommand = 'S';
+    Serial.println("OBSTACLE STOP");
   }
 
-  switch (c) {
-    case 'F':
-      forward();
-      break;
-    case 'L':
-      left();
-      break;
-    case 'R':
-      right();
-      break;
-    case 'B':
-      backward();
-      break;
-    case 'S':
-      freeze();
-      break;
+  if (configBt.available()) {
+    c = configBt.read();
+    Serial.println(c);
+
+    if (distance < 20) {
+      switch (c) {
+        case 'B':
+          backward();
+          lastCommand = 'B';
+          break;
+        case 'L':
+          left();
+          lastCommand = 'L';
+          break;
+        case 'R':
+          right();
+          lastCommand = 'R';
+          break;
+        case 'F':
+          freeze();
+          lastCommand = 'S';
+          Serial.println("forward blocked");
+          break;
+        case 'S':
+          freeze();
+          lastCommand = 'S';
+          break;
+      }
+    } else {
+
+      switch (c) {
+        case 'F':
+          forward();
+          lastCommand = 'F';
+          break;
+        case 'L':
+          left();
+          lastCommand = 'L';
+          break;
+        case 'R':
+          right();
+          lastCommand = 'R';
+          break;
+        case 'B':
+          backward();
+          lastCommand = 'B';
+          break;
+        case 'S':
+          freeze();
+          lastCommand = 'S';
+          break;
+      }
+    }
   }
-  delay(100);
+  delay(50); 
 }
 
 void forward() {
@@ -218,6 +269,7 @@ void forward() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, HIGH);
   digitalWrite(A_1B_F, LOW);
+  Serial.println("F");
 }
 
 void backward() {
@@ -229,6 +281,7 @@ void backward() {
   digitalWrite(B_2A_F, HIGH);
   digitalWrite(A_1A_F, LOW);
   digitalWrite(A_1B_F, HIGH);
+  Serial.println("B");
 }
 
 void left() {
@@ -240,6 +293,7 @@ void left() {
   digitalWrite(B_2A_F, HIGH);
   digitalWrite(A_1A_F, HIGH);
   digitalWrite(A_1B_F, LOW);
+  Serial.println("L");
 }
 
 void right() {
@@ -251,6 +305,7 @@ void right() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, LOW);
   digitalWrite(A_1B_F, HIGH);
+  Serial.println("R");
 }
 
 void freeze() {
@@ -262,6 +317,7 @@ void freeze() {
   digitalWrite(B_2A_F, LOW);
   digitalWrite(A_1A_F, LOW);
   digitalWrite(A_1B_F, LOW);
+  Serial.println("S");
 }
 ```
 
