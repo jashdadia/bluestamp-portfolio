@@ -1,4 +1,7 @@
-# Gesture-Controlled Robot
+<title>Jash Dadia - Gesture-Controlled Robotic Car</title>
+<link rel="icon" type="image/png" href="https://jashdadia.github.io/bluestamp-portfolio/logo.svg">
+
+# Gesture-Controlled Robotic Car
 This project is about controlling a robot car with gestures from your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors.
 
 
@@ -10,7 +13,7 @@ This project is about controlling a robot car with gestures from your wrist. The
 
 # Final Milestone
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KwhL4cRRagQ" title="Jash D FInal Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Since my second milestone, I have improved my gesture controlled robotic car by adding a cardboard payload platform mounted with Velcro straps as well as an ultrasonic sensor to detect obstacles within 20 centimeters, instead of the speedometer idea I had last week. The biggest challenges I faced were wiring and programming issues, which I am very glad my instructors helped me get through. They taught me major topics such as connecting HC05 Bluetooth modules using AT commands, using advanced commands from the SoftwareSerial library, as well as using voltage dividers. In the future, I want to be able to use PCBs and soldering irons to make my finished product more polished.
 
@@ -43,7 +46,7 @@ So far, I have made progress on my project by completing the car portion, which 
 # Code
 Here is my final code for my gesture-controlled robot, after adding the ultrasonic sensor:
 
-## **Code for Nano:**
+## **Code for Nano (Controller module):**
 
 ```c++
 #include <SoftwareSerial.h>
@@ -132,7 +135,7 @@ void determineGesture() {
 }
 ```
 
-## **Code for Uno:**
+## **Code for Uno (Car module):**
 
 ```c++
 #include <SoftwareSerial.h>
