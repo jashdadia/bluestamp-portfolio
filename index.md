@@ -1,10 +1,6 @@
 # Gesture-Controlled Robot
-This project is about controlling a robot car with gestures from your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to complete my base project, and am now working on modifications!
+This project is about controlling a robot car with gestures from your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors.
 
-```html
-In Progress:
-- Third milestone video
-```
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
@@ -38,11 +34,11 @@ So far, I have made progress on my project by completing the car portion, which 
 
 ## **Schematic Diagram for Car:**
 
-<img src = "https://jashdadia.github.io/bluestamp-portfolio/car-schematic.png" width = "400px">
+<img src = "https://jashdadia.github.io/bluestamp-portfolio/car-schematic.png" width = "600px">
 
 ## **Schematic Diagram for Controller:**
 
-<img src = "https://jashdadia.github.io/bluestamp-portfolio/controller-schematic.png" width = "400px">
+<img src = "https://jashdadia.github.io/bluestamp-portfolio/controller-schematic.png" width = "600px">
 
 # Code
 Here is my final code for my gesture-controlled robot, after adding the ultrasonic sensor:
