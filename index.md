@@ -22,7 +22,7 @@ In Progress:
   
 # Final Milestone
 
-<iframe width="1811" height="891" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
@@ -34,7 +34,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 # Second Milestone
 
-<iframe width="1811" height="891" src="https://www.youtube.com/embed/ykYTbxI2UQA" title="Jash D Milestone 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ykYTbxI2UQA" title="Jash D Milestone 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Since my first milestone, I integrated gesture control and bluetooth communication into my project, which means that I have completed my base project. I had to sync the bluetooth modules by wiring everything correctly (especially the TX and RX pins), and setting them up using serial commands to assign the Uno to be the slave and the Nano as the master. The nano is the controller, and it sends movement commands based on the accelerometer input data to the Uno on the car via bluetooth, which controls the car's motors. Also, I realized that just one 9V power supply was not enough to meet the demands of the motors, so everything would start heating up, which is why I decided to use two 9V batteries, each one for two motors. There were some programming and wiring issues which Josh helped me fix. Before the final milestone, I am planning on adding a speedometer and a 7-segment display as my modification, and I need to organize everything on the car since everything is currently a mess.
 
@@ -42,7 +42,7 @@ Since my first milestone, I integrated gesture control and bluetooth communicati
 
 # First Milestone
 
-<iframe width="1811" height="891" src="https://www.youtube.com/embed/YTKSOw8SZiI" title="Jash D Milestone 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YTKSOw8SZiI" title="Jash D Milestone 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 So far, I have made progress on my project by completing the car portion, which I can control by uploading code to the Arduino Uno to make it move as I want, but it’s not yet remotely controlled. The setup uses an Arduino Uno to send commands to two motor controllers (H-bridges) which power two motors each for the front and rear motor pairs, all running on a single 9-volt battery. I faced some challenges, like bootloader issues in the Arduino IDE, a faulty rear motor, and the power supply overheating because the motors drew too much current, but my instructors helped me solve these problems. My next steps are to add a Bluetooth module to the car on a breadboard to connect a the car to a motor controller with another bluetooth module on it, using an Arduino Nano with an accelerometer.
 
