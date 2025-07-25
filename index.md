@@ -1,21 +1,16 @@
 # Gesture-Controlled Robot
 This project is about controlling a robot car with gestures from your wrist. There is a robotic car connnected to its controller via bluetooth, which uses an accelerometer to control movement with hand gestures, all managed by an Arduino Nano and Uno system. My project had lots of complex wiring and some coding, which were tough to get right, but I kept working through the problems with the help of my instructors. So far, I have managed to complete my base project, and am now working on modifications!
 
-You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 ```html
 In Progress:
 - Third milestone video
-- Headstone image
-- Other resources
 ```
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
 | Jash D | Dublin High School | Mechanical Engineering | Incoming Senior
 
-**Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
-
-![Headstone Image](logo.svg)
+<img src = "https://jashdadia.github.io/bluestamp-portfolio/headstone-image.jpeg" width = "400px">
 
 # Final Milestone
 
@@ -43,11 +38,11 @@ So far, I have made progress on my project by completing the car portion, which 
 
 ## **Schematic Diagram for Car:**
 
-<img src = "/car-schematic.png" width = "400px">
+<img src = "https://jashdadia.github.io/bluestamp-portfolio/car-schematic.png" width = "400px">
 
 ## **Schematic Diagram for Controller:**
 
-<img src = "/controller-schematic.png" width = "400px">
+<img src = "https://jashdadia.github.io/bluestamp-portfolio/controller-schematic.png" width = "400px">
 
 # Code
 Here is my final code for my gesture-controlled robot, after adding the ultrasonic sensor:
@@ -342,6 +337,7 @@ void freeze() {
 
 # Other Resources/Examples
 
-- [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
-- [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
-- [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
+- [Tristan F's BlueStamp Portfolio](https://tristanfabela.github.io/Tristan_BlueStampPortfolio/)
+- [Gesture-Controlled Robot Tutorial on Hackster.io](https://www.hackster.io/embeddedlab786/hand-gesture-control-robot-via-bluetooth-94b13d)
+- [HC-05 to HC-05 Bluetooth Module Connection Tutorial by Justin Miner](https://docs.google.com/document/d/1EpnEPulXQwPDSK-nKLohqPjpeXNteP2G/edit)
+- [Ultrasonic Sensor Integration Guide on Arduino Forum](https://projecthub.arduino.cc/lucasfernando/ultrasonic-sensor-with-arduino-complete-guide-284faf)
